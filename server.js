@@ -10,8 +10,8 @@ const { join } = require('path')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const apiRoot = (process.env.PATH_API || 'http://localhost') + ':4000'
-//const apiRoot = 'https://api-tchink.herokuapp.com'
+//const apiRoot = (process.env.PATH_API || 'http://localhost') + ':4000'
+const apiRoot = 'https://api-tchink.herokuapp.com'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
