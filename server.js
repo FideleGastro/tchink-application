@@ -10,8 +10,8 @@ const { join } = require('path')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const applicationRoot = (process.env.PATH_APPLICATION || 'http://localhost') + ':4000'
-
+const apiRoot = (process.env.PATH_API || 'http://localhost') + ':4000'
+//const apiRoot = 'https://api-tchink.herokuapp.com'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
@@ -36,16 +36,16 @@ app.prepare().then(() => {
     async function fetchBar(id) {
         id
             ?
-            barFromApi = await axios.get(`${applicationRoot}/api/stores/${id}`)
+            barFromApi = await axios.get(`${apiRoot}/api/stores/${id}`)
             :
-            barFromApi = await axios.get(`${applicationRoot}/api/stores`)
+            barFromApi = await axios.get(`${apiRoot}/api/stores`)
         //TODO: parse category from barFromApi
         return { bar: { ...barFromApi.data }, category: ["category1", "category2", "category3"] }
     }
 
     async function fetchProfile(id) {
         if (id)
-            profileFromApi = await axios.get(applicationRoot + '/api/users/' + id);
+            profileFromApi = await axios.get(apiRoot + '/api/users/' + id);
         //console.log('fetchProfile', 'http://localhost:4000/api/users/' + id)
         return { user: { ...profileFromApi.data } }
     }
@@ -54,7 +54,7 @@ app.prepare().then(() => {
 
     async function PostUser(body) {
         //TODO: check body
-        res = await axios.post(applicationRoot + '/api/users', { ...body });
+        res = await axios.post(apiRoot + '/api/users', { ...body });
         //TODO: catch error
         return res
     }
@@ -68,11 +68,11 @@ app.prepare().then(() => {
 
     async function logUser(body) {
         //TODO: check body
-        res = await axios.get(applicationRoot + '/api/users/count?where=%7B%22name%22%3A%22' + body.email + '%22%2C%20%22password%22%20%3A%20%22' + body.password + '%22%7D');
+        res = await axios.get(apiRoot + '/api/users/count?where=%7B%22name%22%3A%22' + body.email + '%22%2C%20%22password%22%20%3A%20%22' + body.password + '%22%7D');
         //TODO: catch error 
         console.log("res =>", res.data)
         if (res.data.count === 1) {
-            user = await axios.get(applicationRoot + '/api/users?filter=%7B%20%22where%22%20%3A%20%7B%22email%22%3A%22' + body.email + '%22%2C%20%22password%22%20%3A%20%22' + body.password + '%22%7D%7D')
+            user = await axios.get(apiRoot + '/api/users?filter=%7B%20%22where%22%20%3A%20%7B%22email%22%3A%22' + body.email + '%22%2C%20%22password%22%20%3A%20%22' + body.password + '%22%7D%7D')
             console.log("user =>", user.data, body.email, body.password)
             return user.data
         }
